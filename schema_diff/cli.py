@@ -20,6 +20,7 @@ def version_callback(value: bool):
     if value:
         try:
             from importlib.metadata import version
+
             pkg_version = version("api-schema-diff")
         except Exception:
             pkg_version = "0.1.0"  # fallback version
