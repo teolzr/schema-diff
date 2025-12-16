@@ -93,7 +93,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install schema-diff
+      - name: Install api-schema-diff
         run: |
           python -m pip install --upgrade pip
           pip install -e .
@@ -102,7 +102,7 @@ jobs:
       - name: Test CLI - breaking changes
         run: |
           set +e
-          schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
+          api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
           EXIT_CODE=$?
           if [ $EXIT_CODE -eq 1 ]; then
             echo "✓ Breaking changes detected correctly"
@@ -115,7 +115,7 @@ jobs:
       - name: Test CLI - non-breaking changes
         run: |
           set +e
-          schema-diff examples/api-v1.yaml examples/api-v2-safe.yaml
+          api-schema-diff examples/api-v1.yaml examples/api-v2-safe.yaml
           EXIT_CODE=$?
           if [ $EXIT_CODE -eq 0 ]; then
             echo "✓ No breaking changes detected correctly"
@@ -128,7 +128,7 @@ jobs:
       - name: Test CLI - JSON output
         run: |
           set +e
-          OUTPUT=$(schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml --format json)
+          OUTPUT=$(api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml --format json)
           SCHEMA_EXIT=$?
           set -e
           

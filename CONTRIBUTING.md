@@ -1,6 +1,6 @@
-# Contributing to schema-diff
+# Contributing to api-schema-diff
 
-Thank you for your interest in contributing to schema-diff! 🎉
+Thank you for your interest in contributing to api-schema-diff! 🎉
 
 This document provides guidelines and instructions for contributing.
 
@@ -72,7 +72,7 @@ pip install -e ".[dev]"
 
 ```bash
 pytest
-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
+api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
 ```
 
 #### Making Changes
@@ -288,5 +288,5 @@ Contributors will be recognized in:
 - Release notes for their contributions
 - CHANGELOG.md for significant features
 
-Thank you for contributing to schema-diff! 🚀
+Thank you for contributing to api-schema-diff! 🚀
 

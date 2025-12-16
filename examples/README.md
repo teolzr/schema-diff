@@ -26,7 +26,7 @@ Version 2 with **non-breaking changes** that are backwards compatible:
 ### Compare v1 with breaking changes
 
 ```bash
-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
+api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
 ```
 
 Expected output: **Breaking changes detected** (exit code 1)
@@ -40,7 +40,7 @@ Breaking changes:
 ### Compare v1 with safe changes
 
 ```bash
-schema-diff examples/api-v1.yaml examples/api-v2-safe.yaml
+api-schema-diff examples/api-v1.yaml examples/api-v2-safe.yaml
 ```
 
 Expected output: **No breaking changes** (exit code 0)
@@ -54,23 +54,23 @@ Non-breaking changes:
 ### JSON output
 
 ```bash
-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml --format json
+api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml --format json
 ```
 
 Get machine-readable output for CI/CD pipelines.
 
 ## Testing locally
 
-After installing `schema-diff`, run:
+After installing `api-schema-diff`, run:
 
 ```bash
 # Install the tool
 pip install -e .
 
 # Test breaking changes
-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
+api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
 
 # Test non-breaking changes
-schema-diff examples/api-v1.yaml examples/api-v2-safe.yaml
+api-schema-diff examples/api-v1.yaml examples/api-v2-safe.yaml
 ```
 

@@ -1,8 +1,8 @@
-# schema-diff
+# api-schema-diff
 
 Detect **breaking changes** between API schemas (OpenAPI / JSON Schema) in a **deterministic, CI-friendly** way.
 
-`schema-diff` is a CLI tool designed to answer one question reliably:
+`api-schema-diff` is a CLI tool designed to answer one question reliably:
 
 > **"Will this schema change break existing clients?"**
 
@@ -18,7 +18,7 @@ Common causes:
 - Changing parameter requirements
 - Changing request/response schemas
 
-`schema-diff` catches these issues **before** they reach production.
+`api-schema-diff` catches these issues **before** they reach production.
 
 ---
 
@@ -60,7 +60,7 @@ Common causes:
 ## Installation
 
 ```bash
-pip install schema-diff
+pip install api-schema-diff
 ```
 
 Or install from source:
@@ -83,7 +83,7 @@ pip install -e .
 ### Basic usage
 
 ```bash
-schema-diff old.json new.json
+api-schema-diff old.json new.json
 ```
 
 **Exit codes:**
@@ -95,7 +95,7 @@ schema-diff old.json new.json
 **Text output (default):**
 
 ```bash
-schema-diff old.json new.json
+api-schema-diff old.json new.json
 ```
 
 Output:
@@ -113,7 +113,7 @@ BREAKING CHANGES FOUND
 **JSON output:**
 
 ```bash
-schema-diff old.json new.json --format json
+api-schema-diff old.json new.json --format json
 ```
 
 Output:
@@ -144,7 +144,7 @@ Output:
 ### CLI Options
 
 ```bash
-schema-diff [OPTIONS] OLD_FILE NEW_FILE
+api-schema-diff [OPTIONS] OLD_FILE NEW_FILE
 ```
 
 **Arguments:**
@@ -161,7 +161,7 @@ schema-diff [OPTIONS] OLD_FILE NEW_FILE
 Use `--no-fail-on-breaking` to always exit with code 0 (useful for reporting without failing CI):
 
 ```bash
-schema-diff old.json new.json --no-fail-on-breaking
+api-schema-diff old.json new.json --no-fail-on-breaking
 ```
 
 ---
@@ -197,7 +197,7 @@ schema-diff old.json new.json --no-fail-on-breaking
 ```
 
 ```bash
-schema-diff old.json new.json
+api-schema-diff old.json new.json
 ```
 
 **Detected changes:**
@@ -260,7 +260,7 @@ paths:
 ```
 
 ```bash
-schema-diff old-api.yaml new-api.yaml
+api-schema-diff old-api.yaml new-api.yaml
 ```
 
 **Detected changes:**
@@ -294,26 +294,26 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install schema-diff
-        run: pip install schema-diff
+      - name: Install api-schema-diff
+        run: pip install api-schema-diff
 
       - name: Get old schema from main branch
         run: git show origin/main:api/schema.yaml > old-schema.yaml
 
       - name: Check for breaking changes
-        run: schema-diff old-schema.yaml api/schema.yaml
+        run: api-schema-diff old-schema.yaml api/schema.yaml
 ```
 
 ### GitLab CI
 
 ```yaml
-schema-diff:
+api-schema-diff:
   image: python:3.10
   before_script:
-    - pip install schema-diff
+    - pip install api-schema-diff
   script:
     - git show origin/main:api/schema.yaml > old-schema.yaml
-    - schema-diff old-schema.yaml api/schema.yaml
+    - api-schema-diff old-schema.yaml api/schema.yaml
   only:
     changes:
       - api/schema.yaml
@@ -327,9 +327,9 @@ Create `.pre-commit-config.yaml`:
 repos:
   - repo: local
     hooks:
-      - id: schema-diff
+      - id: api-schema-diff
         name: Check API schema for breaking changes
-        entry: bash -c 'git show HEAD:api/schema.yaml > /tmp/old-schema.yaml && schema-diff /tmp/old-schema.yaml api/schema.yaml'
+        entry: bash -c 'git show HEAD:api/schema.yaml > /tmp/old-schema.yaml && api-schema-diff /tmp/old-schema.yaml api/schema.yaml'
         language: system
         files: 'api/schema.yaml'
         pass_filenames: false
@@ -365,6 +365,8 @@ pytest --cov=schema_diff --cov-report=html
 # Run specific test file
 pytest tests/test_openapi_diff.py
 ```
+
+**Note:** The Python package is still named `schema_diff` internally, but the PyPI package and CLI command are `api-schema-diff`.
 
 ### Code formatting
 
@@ -475,3 +477,5 @@ Built with:
 
 - 🐛 **Issues**: [GitHub Issues](https://github.com/teolzr/schema-diff/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/teolzr/schema-diff/discussions)
+
+**Note:** Repository name is `schema-diff`, but PyPI package name is `api-schema-diff`

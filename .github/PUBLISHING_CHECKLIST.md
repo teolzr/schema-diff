@@ -8,7 +8,7 @@ Before publishing to GitHub and PyPI, verify the following:
 - [ ] Code is formatted: `black .`
 - [ ] Linting passes: `ruff check .`
 - [ ] Package installs correctly: `pip install -e .`
-- [ ] CLI works: `schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml`
+- [ ] CLI works: `api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml`
 
 ## ✅ Documentation
 
@@ -52,6 +52,7 @@ Before publishing to GitHub and PyPI, verify the following:
 After pushing:
 
 - [ ] Add repository description: "Detect breaking changes between API schemas (OpenAPI / JSON Schema)"
+- [ ] **Note:** Repository name is `schema-diff` but PyPI package name is `api-schema-diff`
 - [ ] Add topics/tags: `openapi`, `json-schema`, `api`, `diff`, `breaking-changes`, `ci-cd`, `python`
 - [ ] Enable GitHub Actions (should be automatic)
 - [ ] (Optional) Add repository image/logo
@@ -86,12 +87,12 @@ pytest -v
 black .
 ruff check .
 pip install -e .
-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
+api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
 
 # Git setup (if not already done)
 git init
 git add .
-git commit -m "Initial commit: schema-diff v0.1.0"
+git commit -m "Initial commit: api-schema-diff v0.1.0"
 git branch -M main
 git remote add origin https://github.com/teolzr/schema-diff.git
 git push -u origin main

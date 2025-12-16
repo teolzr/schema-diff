@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2025-12-16
 
 ### Added
-- Initial release of schema-diff
+- Initial release of api-schema-diff
 - OpenAPI 3.x schema comparison
 - Generic JSON/YAML schema comparison
 - CLI with text and JSON output formats
