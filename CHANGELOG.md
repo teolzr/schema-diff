@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2025-12-16
+
+### Changed
+- Switched PyPI version badge from badge.fury.io to shields.io for better cache control
+- Ensures badge shows current version immediately after release
+
 ## [1.0.1] - 2025-12-16
 
 ### Fixed
