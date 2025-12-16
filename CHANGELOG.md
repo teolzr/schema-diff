@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-12-16
+
+### Fixed
+- PyPI README badge rendering - badges now display correctly on PyPI package page
+- Explicitly set `content-type = "text/markdown"` in pyproject.toml for proper PyPI Markdown rendering
+
 ## [1.0.0] - 2025-12-16
 
 ### Added
