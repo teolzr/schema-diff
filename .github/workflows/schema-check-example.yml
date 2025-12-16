@@ -1,0 +1,50 @@
+name: API Schema Check Examples
+
+on:
+  pull_request:
+    paths:
+      - 'examples/**/*.yaml'
+  workflow_dispatch:  # Manual trigger for testing
+  push:
+    branches:
+      - main
+    paths:
+      - 'action.yml'
+      - '.github/workflows/schema-check-example.yml'
+
+jobs:
+  # Example 1: Simple check
+  simple:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          old: examples/api-v1.yaml
+          new: examples/api-v2-safe.yaml
+
+  # Example 2: Compare against main branch
+  compare-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: git show origin/main:examples/api-v1.yaml > /tmp/baseline.yaml
+      - uses: ./
+        with:
+          old: /tmp/baseline.yaml
+          new: examples/api-v1.yaml
+
+  # Example 3: JSON output, don't fail
+  json-output:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          old: examples/api-v1.yaml
+          new: examples/api-v2-breaking.yaml
+          format: json
+          fail-on-breaking: false
+

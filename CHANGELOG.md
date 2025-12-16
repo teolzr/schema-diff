@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2025-12-16
+
+### Added
+- 🎉 **GitHub Action** - Use in any workflow with `uses: teolzr/schema-diff@v1`
+- Composite action implementation (pip-based, fast)
+- Example workflows for CI integration
+- Manual workflow trigger for testing
+
+### Changed
+- Project now production-ready with full CI/CD automation
+
 ## [0.1.5] - 2025-12-16
 
 ### Added
@@ -72,7 +83,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Development tooling (Black, Ruff, MyPy, pytest)
 - Comprehensive documentation and contribution guidelines
 
-[Unreleased]: https://github.com/teolzr/schema-diff/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/teolzr/schema-diff/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/teolzr/schema-diff/compare/v0.1.5...v1.0.0
 [0.1.5]: https://github.com/teolzr/schema-diff/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/teolzr/schema-diff/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/teolzr/schema-diff/compare/v0.1.2...v0.1.3

@@ -112,6 +112,38 @@ docker run --rm \
 
 **📚 [Full Docker documentation →](docs/DOCKER.md)**
 
+### GitHub Action
+
+Use in any GitHub workflow:
+
+```yaml
+- uses: teolzr/schema-diff@v1
+  with:
+    old: api/schema-v1.yaml
+    new: api/schema-v2.yaml
+```
+
+**Compare against main branch:**
+
+```yaml
+- run: git show origin/main:api/schema.yaml > /tmp/baseline.yaml
+- uses: teolzr/schema-diff@v1
+  with:
+    old: /tmp/baseline.yaml
+    new: api/schema.yaml
+```
+
+**JSON output:**
+
+```yaml
+- uses: teolzr/schema-diff@v1
+  with:
+    old: old.yaml
+    new: new.yaml
+    format: json
+    fail-on-breaking: false
+```
+
 ---
 
 ## Usage

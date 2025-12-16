@@ -1,0 +1,39 @@
+name: 'API Schema Diff'
+description: 'Detect breaking changes between API schemas (OpenAPI / JSON Schema)'
+author: 'Teodor Lazar'
+
+branding:
+  icon: 'alert-triangle'
+  color: 'orange'
+
+inputs:
+  old:
+    description: 'Path to the old schema file'
+    required: true
+  new:
+    description: 'Path to the new schema file'
+    required: true
+  format:
+    description: 'Output format: text or json'
+    required: false
+    default: 'text'
+  fail-on-breaking:
+    description: 'Exit with code 1 when breaking changes are found'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install api-schema-diff
+      shell: bash
+      run: pip install --quiet api-schema-diff
+    
+    - name: Run schema diff
+      shell: bash
+      run: |
+        if [ "${{ inputs.fail-on-breaking }}" = "true" ]; then
+          api-schema-diff "${{ inputs.old }}" "${{ inputs.new }}" --format "${{ inputs.format }}"
+        else
+          api-schema-diff "${{ inputs.old }}" "${{ inputs.new }}" --format "${{ inputs.format }}" --no-fail-on-breaking
+        fi
