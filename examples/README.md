@@ -73,4 +73,3 @@ api-schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
 # Test non-breaking changes
 api-schema-diff examples/api-v1.yaml examples/api-v2-safe.yaml
 ```
-

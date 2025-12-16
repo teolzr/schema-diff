@@ -107,4 +107,3 @@ git push origin v0.1.0
 - Build artifacts (`__pycache__/`, `*.egg-info/`, `dist/`, `.venv/`) are gitignored
 - The `.github/workflows/` will run automatically on push/PR
 - The release workflow needs `PYPI_API_TOKEN` secret configured
-

@@ -19,4 +19,3 @@ pre-commit>=3.6
 
 # YAML support for examples
 pyyaml>=6.0
-

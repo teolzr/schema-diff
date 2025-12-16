@@ -192,10 +192,10 @@ def test_feature_name_scenario():
     # Arrange - set up test data
     old_schema = {"field": "value"}
     new_schema = {"field": "new_value"}
-    
+
     # Act - perform the action
     result = diff_objects(old_schema, new_schema)
-    
+
     # Assert - verify the result
     assert result.has_breaking_changes()
     assert any(c.path == "field" for c in result.breaking)
@@ -245,12 +245,12 @@ def find_breaking_change(
 ) -> Optional[Change]:
     """
     Detect breaking changes between two schema values.
-    
+
     Args:
         old_value: The original schema value
         new_value: The new schema value
         path: JSON path to the current location
-        
+
     Returns:
         A Change object if a breaking change is detected, None otherwise
     """
@@ -289,4 +289,3 @@ Contributors will be recognized in:
 - CHANGELOG.md for significant features
 
 Thank you for contributing to api-schema-diff! 🚀
-

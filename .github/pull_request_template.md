@@ -17,9 +17,9 @@ Fixes #(issue number)
 ## Changes Made
 <!-- Provide a detailed list of changes -->
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Testing
 <!-- Describe the tests you ran to verify your changes -->
@@ -53,4 +53,3 @@ schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml
 
 ## Additional Notes
 <!-- Any additional information that reviewers should know -->
-

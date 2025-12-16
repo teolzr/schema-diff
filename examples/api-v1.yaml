@@ -230,4 +230,3 @@ components:
         code:
           type: string
           description: Error code
-

@@ -46,4 +46,3 @@ If possible, provide the schema files that reproduce the issue:
 
 ## Additional context
 Add any other context about the problem here.
-
