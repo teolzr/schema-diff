@@ -3,6 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
 [![Python versions](https://img.shields.io/pypi/pyversions/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
 [![CI](https://github.com/teolzr/schema-diff/actions/workflows/ci.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions)
+[![Docker](https://github.com/teolzr/schema-diff/actions/workflows/docker.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions/workflows/docker.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -81,6 +82,35 @@ pip install -e .
 - Python 3.10 or higher
 - `typer>=0.12`
 - `rich>=13.7`
+
+### Docker
+
+Run without installing Python:
+
+```bash
+# Pull the image
+docker pull ghcr.io/teolzr/schema-diff:latest
+
+# Run with local files
+docker run --rm -v $(pwd):/workspace ghcr.io/teolzr/schema-diff:latest old.yaml new.yaml
+
+# Check version
+docker run --rm ghcr.io/teolzr/schema-diff:latest --version
+
+# Use in CI/CD
+docker run --rm \
+  -v $(pwd):/workspace \
+  ghcr.io/teolzr/schema-diff:latest \
+  schemas/v1.yaml schemas/v2.yaml \
+  --format json
+```
+
+**Available tags:**
+- `latest` - Latest stable release
+- `v0.1.4` - Specific version
+- `main` - Latest from main branch
+
+**📚 [Full Docker documentation →](docs/DOCKER.md)**
 
 ---
 

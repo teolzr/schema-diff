@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Docker image support (GitHub Container Registry)
+- Multi-platform Docker images (linux/amd64, linux/arm64)
+- Docker workflow for automated builds
+- Comprehensive Docker documentation
+
 ## [0.1.4] - 2025-12-16
 
 ### Added
