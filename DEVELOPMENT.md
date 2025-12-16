@@ -200,4 +200,3 @@ We follow [Semantic Versioning](https://semver.org/):
 - [Release Guide](RELEASE_GUIDE.md) (if exists)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [PyPI Trusted Publishers](https://docs.pypi.org/trusted-publishers/)
-
