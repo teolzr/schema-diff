@@ -1,0 +1,310 @@
+openapi: 3.0.3
+info:
+  title: User Management API
+  version: 2.0.0
+  description: Example API v2 with NON-BREAKING CHANGES
+
+servers:
+  - url: https://api.example.com/v2
+
+paths:
+  /users:
+    get:
+      summary: List all users
+      operationId: listUsers
+      tags:
+        - users
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of users to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Number of users to skip
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        # NON-BREAKING: New optional parameter
+        - name: sort
+          in: query
+          description: Sort field
+          required: false
+          schema:
+            type: string
+            enum: [name, email, createdAt]
+            default: createdAt
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  total:
+                    type: integer
+                    description: Total number of users
+                  # NON-BREAKING: New optional field in response
+                  hasMore:
+                    type: boolean
+                    description: Whether there are more users available
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create a new user
+      operationId: createUser
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The user ID
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Get a user by ID
+      operationId: getUserById
+      tags:
+        - users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      summary: Update a user
+      operationId: updateUser
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete a user
+      operationId: deleteUser
+      tags:
+        - users
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # NON-BREAKING: New endpoint added
+  /users/{userId}/profile:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The user ID
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Get user profile
+      operationId: getUserProfile
+      tags:
+        - users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User email address
+        name:
+          type: string
+          description: User full name
+          minLength: 1
+          maxLength: 100
+        age:
+          type: integer
+          description: User age
+          minimum: 0
+          maximum: 150
+        createdAt:
+          type: string
+          format: date-time
+          description: When the user was created
+        # NON-BREAKING: New optional fields
+        updatedAt:
+          type: string
+          format: date-time
+          description: When the user was last updated
+        isActive:
+          type: boolean
+          description: Whether the user account is active
+          default: true
+
+    CreateUserRequest:
+      type: object
+      required:
+        - email
+        - name
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+        name:
+          type: string
+          description: User full name
+          minLength: 1
+          maxLength: 100
+        age:
+          type: integer
+          description: User age
+          minimum: 0
+          maximum: 150
+        # NON-BREAKING: New optional field in request
+        bio:
+          type: string
+          description: User biography
+          maxLength: 500
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+        name:
+          type: string
+          description: User full name
+          minLength: 1
+          maxLength: 100
+        age:
+          type: integer
+          description: User age
+          minimum: 0
+          maximum: 150
+        # NON-BREAKING: New optional field
+        bio:
+          type: string
+          description: User biography
+          maxLength: 500
+
+    # NON-BREAKING: New schema added
+    UserProfile:
+      type: object
+      properties:
+        bio:
+          type: string
+          description: User biography
+        website:
+          type: string
+          format: uri
+          description: User website
+        location:
+          type: string
+          description: User location
+
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+

@@ -1,0 +1,19 @@
+# Development dependencies for schema-diff
+# Install with: pip install -r requirements-dev.txt
+
+# Testing
+pytest>=7.4
+pytest-cov>=4.1
+
+# Code formatting and linting
+black>=23.12
+ruff>=0.1
+mypy>=1.7
+
+# Building and publishing
+build>=1.0
+twine>=4.0
+
+# YAML support for examples
+pyyaml>=6.0
+
