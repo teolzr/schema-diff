@@ -1,5 +1,11 @@
 # api-schema-diff
 
+[![PyPI version](https://badge.fury.io/py/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
+[![Python versions](https://img.shields.io/pypi/pyversions/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
+[![CI](https://github.com/teolzr/schema-diff/actions/workflows/ci.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 Detect **breaking changes** between API schemas (OpenAPI / JSON Schema) in a **deterministic, CI-friendly** way.
 
 `api-schema-diff` is a CLI tool designed to answer one question reliably:
