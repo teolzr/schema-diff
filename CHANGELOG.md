@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2025-12-16
+
+### Fixed
+- Workflow filename now matches PyPI Trusted Publisher configuration
+- Resolved "invalid-publisher" error by using correct workflow name (release.yml)
+
 ## [1.0.3] - 2025-12-16
 
 ### Fixed
