@@ -1,4 +1,4 @@
-name: Auto Tag on Version Change
+name: Auto Release on Version Change
 
 on:
   push:
@@ -8,10 +8,12 @@ on:
 
 permissions:
   contents: write
+  id-token: write  # Required for PyPI trusted publishing
 
 jobs:
-  auto-tag:
+  check-and-release:
     runs-on: ubuntu-latest
+    environment: pypi
 
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +43,7 @@ jobs:
             echo "✓ Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
           else
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "→ Version unchanged or first commit"
+            echo "→ Version unchanged, skipping release"
           fi
 
       - name: Check if tag already exists
@@ -80,4 +82,34 @@ jobs:
           git push origin "$TAG"
 
           echo "Successfully created and pushed tag: $TAG"
-          echo "Release workflow will now be triggered automatically"
+
+      - name: Set up Python
+        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+
+      - name: Install build tools
+        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build package
+        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        run: python -m build
+
+      - name: Publish to PyPI
+        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Create GitHub Release
+        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version_check.outputs.current_version }}
+          name: Release v${{ steps.version_check.outputs.current_version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+
