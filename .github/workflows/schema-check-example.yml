@@ -47,4 +47,3 @@ jobs:
           new: examples/api-v2-breaking.yaml
           format: json
           fail-on-breaking: false
-

@@ -28,7 +28,7 @@ runs:
     - name: Install api-schema-diff
       shell: bash
       run: pip install --quiet api-schema-diff
-    
+
     - name: Run schema diff
       shell: bash
       run: |
