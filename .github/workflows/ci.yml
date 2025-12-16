@@ -127,12 +127,26 @@ jobs:
 
       - name: Test CLI - JSON output
         run: |
+          set +e
           OUTPUT=$(schema-diff examples/api-v1.yaml examples/api-v2-breaking.yaml --format json)
+          SCHEMA_EXIT=$?
+          set -e
+          
+          # Check JSON is valid
           echo "$OUTPUT" | python -m json.tool > /dev/null
           if [ $? -eq 0 ]; then
             echo "✓ JSON output is valid"
           else
             echo "✗ JSON output is invalid"
+            echo "Output was: $OUTPUT"
+            exit 1
+          fi
+          
+          # Check exit code was correct (should be 1 for breaking changes)
+          if [ $SCHEMA_EXIT -eq 1 ]; then
+            echo "✓ Exit code is correct (1 for breaking changes)"
+          else
+            echo "✗ Expected exit code 1, got $SCHEMA_EXIT"
             exit 1
           fi
 
