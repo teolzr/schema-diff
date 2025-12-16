@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2025-12-16
+
+### Fixed
+- **CRITICAL FIX**: PyPI deployment now triggers automatically on version bump
+- Combined auto-tag and release workflows into single auto-release workflow
+- Eliminates GitHub Actions workflow trigger limitation
+
+### Technical Details
+- Previously: auto-tag workflow couldn't trigger release workflow (GitHub security limitation)
+- Now: Single workflow handles version check → tag creation → build → PyPI publish → GitHub release
+- No more manual tag pushing needed - everything is fully automated
+
 ## [1.0.2] - 2025-12-16
 
 ### Changed
