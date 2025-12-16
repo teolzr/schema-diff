@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Optional
 
 import typer
 from rich.console import Console
@@ -12,6 +13,18 @@ from .openapi.diff import diff_openapi
 
 app = typer.Typer(add_completion=False)
 console = Console()
+
+
+def version_callback(value: bool):
+    """Callback for --version flag."""
+    if value:
+        try:
+            from importlib.metadata import version
+            pkg_version = version("api-schema-diff")
+        except Exception:
+            pkg_version = "0.1.0"  # fallback version
+        console.print(f"api-schema-diff version {pkg_version}")
+        raise typer.Exit()
 
 
 @app.command()
@@ -28,9 +41,16 @@ def main(
         "--fail-on-breaking/--no-fail-on-breaking",
         help="Exit with code 1 when breaking changes are found (default: true).",
     ),
+    version: Optional[bool] = typer.Option(
+        None,
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+        help="Show version and exit.",
+    ),
 ):
     """
-    schema-diff
+    api-schema-diff
 
     Exit code (default):
       0 -> no breaking changes
