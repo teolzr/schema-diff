@@ -1,6 +1,6 @@
 # api-schema-diff
 
-[![PyPI version](https://badge.fury.io/py/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
+[![PyPI version](https://img.shields.io/pypi/v/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
 [![Python versions](https://img.shields.io/pypi/pyversions/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
 [![CI](https://github.com/teolzr/schema-diff/actions/workflows/ci.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions)
 [![Docker](https://github.com/teolzr/schema-diff/actions/workflows/docker.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions/workflows/docker.yml)
