@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2025-12-16
+
 ### Added
 - Initial release of schema-diff
 - OpenAPI 3.x schema comparison
@@ -22,11 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD friendly exit codes
 - Comprehensive test suite
 - Example schemas and documentation
-
-## [0.1.0] - 2025-01-XX
-
-### Added
-- Initial release
+- GitHub Actions CI/CD workflows
+- Development tooling (Black, Ruff, MyPy, pytest)
+- Comprehensive documentation and contribution guidelines
 
 [Unreleased]: https://github.com/teolzr/schema-diff/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/teolzr/schema-diff/releases/tag/v0.1.0
