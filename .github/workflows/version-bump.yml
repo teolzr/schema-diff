@@ -82,8 +82,8 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           branch: chore/bump-version-${{ steps.bump.outputs.new_version }}
-          commit-message: chore: bump version to ${{ steps.bump.outputs.new_version }} after develop merge
-          title: chore: bump version to ${{ steps.bump.outputs.new_version }} after develop merge
+          commit-message: "chore: bump version to ${{ steps.bump.outputs.new_version }} after develop merge"
+          title: "chore: bump version to ${{ steps.bump.outputs.new_version }} after develop merge"
           body: |
             ## Summary
 
