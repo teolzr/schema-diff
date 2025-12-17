@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'pyproject.toml'
+    tags:
+      - 'v*'
+
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,6 +16,7 @@ permissions:
 
 jobs:
   check-and-release:
+    if: github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/') || github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     environment: pypi
 
@@ -20,7 +25,21 @@ jobs:
         with:
           fetch-depth: 2  # Need previous commit to compare
 
+      - name: Determine trigger type
+        id: mode
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            echo "is_tag=true" >> "$GITHUB_OUTPUT"
+            VERSION="${GITHUB_REF#refs/tags/v}"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "Detected tag push for version $VERSION"
+          else
+            echo "is_tag=false" >> "$GITHUB_OUTPUT"
+            echo "Not a tag push; running version comparison workflow"
+          fi
+
       - name: Check if version changed
+        if: steps.mode.outputs.is_tag != 'true'
         id: version_check
         run: |
           # Get current version from pyproject.toml
@@ -47,7 +66,7 @@ jobs:
           fi
 
       - name: Check if tag already exists
-        if: steps.version_check.outputs.changed == 'true'
+        if: steps.mode.outputs.is_tag != 'true' && steps.version_check.outputs.changed == 'true'
         id: tag_check
         env:
           VERSION: ${{ steps.version_check.outputs.current_version }}
@@ -62,7 +81,7 @@ jobs:
           fi
 
       - name: Create and push tag
-        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        if: steps.mode.outputs.is_tag != 'true' && steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
         env:
           VERSION: ${{ steps.version_check.outputs.current_version }}
         run: |
@@ -83,32 +102,52 @@ jobs:
 
           echo "Successfully created and pushed tag: $TAG"
 
+      - name: Determine release target
+        id: publish_decision
+        run: |
+          if [ "${{ steps.mode.outputs.is_tag }}" = "true" ]; then
+            VERSION="${{ steps.mode.outputs.version }}"
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "tag_name=v$VERSION" >> "$GITHUB_OUTPUT"
+            echo "Preparing release for existing tag v$VERSION"
+          elif [ "${{ steps.version_check.outputs.changed }}" = "true" ] && [ "${{ steps.tag_check.outputs.exists }}" = "false" ]; then
+            VERSION="${{ steps.version_check.outputs.current_version }}"
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "tag_name=v$VERSION" >> "$GITHUB_OUTPUT"
+            echo "Preparing release for new version $VERSION"
+          else
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+            echo "No publish required for this trigger"
+          fi
+
       - name: Set up Python
-        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        if: steps.publish_decision.outputs.should_publish == 'true'
         uses: actions/setup-python@v6
         with:
           python-version: '3.10'
 
       - name: Install build tools
-        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        if: steps.publish_decision.outputs.should_publish == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install build
 
       - name: Build package
-        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        if: steps.publish_decision.outputs.should_publish == 'true'
         run: python -m build
 
       - name: Publish to PyPI
-        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        if: steps.publish_decision.outputs.should_publish == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Create GitHub Release
-        if: steps.version_check.outputs.changed == 'true' && steps.tag_check.outputs.exists == 'false'
+        if: steps.publish_decision.outputs.should_publish == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version_check.outputs.current_version }}
-          name: Release v${{ steps.version_check.outputs.current_version }}
+          tag_name: ${{ steps.publish_decision.outputs.tag_name }}
+          name: Release ${{ steps.publish_decision.outputs.tag_name }}
           draft: false
           prerelease: false
           generate_release_notes: true
