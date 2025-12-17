@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   bump-version:
@@ -76,16 +77,22 @@ jobs:
           print(f"new_version={new_version}")
           PY
 
-      - name: Commit and push version bump
+      - name: Create version bump pull request
         if: steps.develop_check.outputs.develop_included == 'true'
-        env:
-          NEW_VERSION: ${{ steps.bump.outputs.new_version }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add pyproject.toml
-          git commit -m "chore: bump version to $NEW_VERSION after develop merge"
-          git push origin HEAD:main
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/bump-version-${{ steps.bump.outputs.new_version }}
+          commit-message: chore: bump version to ${{ steps.bump.outputs.new_version }} after develop merge
+          title: chore: bump version to ${{ steps.bump.outputs.new_version }} after develop merge
+          body: |
+            ## Summary
+
+            Automated patch version bump after merging develop into main.
+
+            - Version updated to `${{ steps.bump.outputs.new_version }}` in `pyproject.toml`.
+            - Created by GitHub Actions to satisfy branch protection rules.
+          add-paths: |
+            pyproject.toml
 
       - name: Skip notification when develop not merged
         if: steps.develop_check.outputs.develop_included == 'false'
