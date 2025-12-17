@@ -1,0 +1,128 @@
+name: Action Self-Test
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'action.yml'
+      - 'schema_diff/**'
+      - '.github/workflows/action-self-test.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'action.yml'
+      - 'schema_diff/**'
+  workflow_dispatch:
+
+jobs:
+  test-action-breaking:
+    name: Test Action - Breaking Changes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Action with Breaking Changes (should fail)
+        id: breaking
+        continue-on-error: true
+        uses: ./
+        with:
+          old: examples/api-v1.yaml
+          new: examples/api-v2-breaking.yaml
+
+      - name: Verify Breaking Changes Detected
+        run: |
+          if [ "${{ steps.breaking.outcome }}" = "failure" ]; then
+            echo "✓ Action correctly detected breaking changes and failed"
+            exit 0
+          else
+            echo "✗ Action should have failed on breaking changes but didn't"
+            exit 1
+          fi
+
+  test-action-safe:
+    name: Test Action - Safe Changes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Action with Safe Changes (should pass)
+        uses: ./
+        with:
+          old: examples/api-v1.yaml
+          new: examples/api-v2-safe.yaml
+
+      - name: Verify Safe Changes Passed
+        run: echo "✓ Action correctly handled safe changes"
+
+  test-action-json-output:
+    name: Test Action - JSON Output
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Action with JSON Format
+        id: json
+        continue-on-error: true
+        uses: ./
+        with:
+          old: examples/api-v1.yaml
+          new: examples/api-v2-breaking.yaml
+          format: json
+          fail-on-breaking: false
+
+      - name: Verify JSON Output Mode
+        run: |
+          if [ "${{ steps.json.outcome }}" = "success" ]; then
+            echo "✓ Action correctly used --no-fail-on-breaking flag"
+            exit 0
+          else
+            echo "✗ Action should not have failed with fail-on-breaking: false"
+            exit 1
+          fi
+
+  test-action-nonexistent-files:
+    name: Test Action - Error Handling
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Action with Non-existent File
+        id: error
+        continue-on-error: true
+        uses: ./
+        with:
+          old: examples/nonexistent.yaml
+          new: examples/api-v1.yaml
+
+      - name: Verify Error Handling
+        run: |
+          if [ "${{ steps.error.outcome }}" = "failure" ]; then
+            echo "✓ Action correctly failed on non-existent file"
+            exit 0
+          else
+            echo "✗ Action should have failed on non-existent file"
+            exit 1
+          fi
+
+  test-action-from-main:
+    name: Test Action - Compare with Main Branch
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get baseline from main
+        run: |
+          git show origin/main:examples/api-v1.yaml > /tmp/baseline.yaml || echo "openapi: 3.0.0" > /tmp/baseline.yaml
+
+      - name: Test Action with Branch Comparison
+        uses: ./
+        with:
+          old: /tmp/baseline.yaml
+          new: examples/api-v1.yaml
+          fail-on-breaking: false
+
+      - name: Verify Branch Comparison
+        run: echo "✓ Action correctly compared against main branch"
