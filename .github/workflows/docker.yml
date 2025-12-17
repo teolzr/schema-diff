@@ -24,11 +24,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx (with retry)
-        uses: nick-fields/retry-action@v3
+        uses: Wandalen/wretry.action@v3.5.0
         with:
-          timeout_minutes: 5
-          max_attempts: 3
-          retry_wait_seconds: 30
+          attempt_limit: 3
+          attempt_delay: 30000
           command: |
             docker buildx create --use --driver docker-container --driver-opt image=moby/buildkit:v0.12.5 || true
             docker buildx inspect --bootstrap
