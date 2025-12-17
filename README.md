@@ -2,8 +2,11 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
 [![Python versions](https://img.shields.io/pypi/pyversions/api-schema-diff.svg)](https://pypi.org/project/api-schema-diff/)
-[![CI](https://github.com/teolzr/schema-diff/actions/workflows/ci.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions)
+[![CI](https://github.com/teolzr/schema-diff/actions/workflows/ci.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions/workflows/ci.yml)
+[![Tests](https://github.com/teolzr/schema-diff/actions/workflows/tests.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions/workflows/tests.yml)
+[![Action Self-Test](https://github.com/teolzr/schema-diff/actions/workflows/action-self-test.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions/workflows/action-self-test.yml)
 [![Docker](https://github.com/teolzr/schema-diff/actions/workflows/docker.yml/badge.svg)](https://github.com/teolzr/schema-diff/actions/workflows/docker.yml)
+[![codecov](https://codecov.io/gh/teolzr/schema-diff/branch/main/graph/badge.svg)](https://codecov.io/gh/teolzr/schema-diff)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
