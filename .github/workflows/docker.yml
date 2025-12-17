@@ -23,8 +23,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx (with retry)
+        uses: nick-fields/retry-action@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            docker buildx create --use --driver docker-container --driver-opt image=moby/buildkit:v0.12.5 || true
+            docker buildx inspect --bootstrap
 
       - name: Log in to GitHub Container Registry
         if: github.event_name != 'pull_request'
@@ -58,8 +65,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64,linux/arm64
+        timeout-minutes: 30
 
       - name: Test Docker image
         if: github.event_name != 'pull_request'
         run: |
           docker run --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest --version
+        timeout-minutes: 5
