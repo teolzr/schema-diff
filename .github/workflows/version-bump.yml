@@ -1,0 +1,92 @@
+name: Auto Version Bump on Develop Merge
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure develop reference available
+        run: git fetch origin develop:refs/remotes/origin/develop --no-tags
+
+      - name: Check if develop changes are included
+        id: develop_check
+        run: |
+          if git merge-base --is-ancestor origin/develop HEAD; then
+            echo "develop_included=true" >> "$GITHUB_OUTPUT"
+            echo "Develop branch is contained in this commit set."
+          else
+            echo "develop_included=false" >> "$GITHUB_OUTPUT"
+            echo "Develop branch is not included; skipping bump."
+          fi
+
+      - name: Set up Python
+        if: steps.develop_check.outputs.develop_included == 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+
+      - name: Bump patch version in pyproject.toml
+        if: steps.develop_check.outputs.develop_included == 'true'
+        id: bump
+        run: |
+          python - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          path = Path("pyproject.toml")
+          text = path.read_text()
+
+          match = re.search(r'^(version\s*=\s*\")(?P<version>[^\"]+)(\")', text, flags=re.MULTILINE)
+          if not match:
+            raise SystemExit("Version field not found in pyproject.toml")
+
+          old_version = match.group("version")
+          try:
+            major, minor, patch = map(int, old_version.split("."))
+          except ValueError as exc:
+            raise SystemExit(f"Unexpected version format: {old_version}") from exc
+
+          new_version = f"{major}.{minor}.{patch + 1}"
+          new_text = re.sub(
+            r'^(version\s*=\s*\")[^\"]+(\")',
+            rf"\g<1>{new_version}\2",
+            text,
+            count=1,
+            flags=re.MULTILINE,
+          )
+
+          path.write_text(new_text)
+
+          output_file = Path(os.environ["GITHUB_OUTPUT"])
+          with output_file.open("a", encoding="utf-8") as fh:
+            fh.write(f"new_version={new_version}\n")
+          print(f"old_version={old_version}")
+          print(f"new_version={new_version}")
+          PY
+
+      - name: Commit and push version bump
+        if: steps.develop_check.outputs.develop_included == 'true'
+        env:
+          NEW_VERSION: ${{ steps.bump.outputs.new_version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pyproject.toml
+          git commit -m "chore: bump version to $NEW_VERSION after develop merge"
+          git push origin HEAD:main
+
+      - name: Skip notification when develop not merged
+        if: steps.develop_check.outputs.develop_included == 'false'
+        run: echo "No develop changes detected; version bump skipped."
