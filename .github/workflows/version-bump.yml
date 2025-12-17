@@ -17,12 +17,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ensure develop reference available
-        run: git fetch origin develop:refs/remotes/origin/develop --no-tags
-
       - name: Check if develop changes are included
         id: develop_check
         run: |
+          if ! git ls-remote --exit-code --heads origin develop >/dev/null; then
+            echo "develop_included=false" >> "$GITHUB_OUTPUT"
+            echo "Develop branch not found on origin; skipping bump."
+            exit 0
+          fi
+
+          git fetch origin develop:refs/remotes/origin/develop --no-tags
+
           if git merge-base --is-ancestor origin/develop HEAD; then
             echo "develop_included=true" >> "$GITHUB_OUTPUT"
             echo "Develop branch is contained in this commit set."
