@@ -17,7 +17,7 @@ jobs:
   simple:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           old: examples/api-v1.yaml
@@ -27,7 +27,7 @@ jobs:
   compare-main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - run: git show origin/main:examples/api-v1.yaml > /tmp/baseline.yaml
@@ -40,7 +40,7 @@ jobs:
   json-output:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           old: examples/api-v1.yaml
