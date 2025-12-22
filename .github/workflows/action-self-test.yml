@@ -19,7 +19,7 @@ jobs:
     name: Test Action - Breaking Changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Test Action with Breaking Changes (should fail)
         id: breaking
@@ -43,7 +43,7 @@ jobs:
     name: Test Action - Safe Changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Test Action with Safe Changes (should pass)
         uses: ./
@@ -58,7 +58,7 @@ jobs:
     name: Test Action - JSON Output
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Test Action with JSON Format
         id: json
@@ -84,7 +84,7 @@ jobs:
     name: Test Action - Error Handling
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Test Action with Non-existent File
         id: error
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
